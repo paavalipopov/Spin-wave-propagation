@@ -83,8 +83,8 @@ void SpinWaveProblem1D::goThroughGrid() {
 //		}
 
 		cout << "Looking for mins" << endl;
-		for(int i = 2; i < determinants.size()-2; i++) {
-			if(isMinimum(determinants, i, 2)) {
+		for(int i = 5; i < determinants.size()-5; i++) {
+			if(isMinimum(determinants, i, 5)) {
 				suspiciousOmega.push_back(checkNull(k, omegaH + omegaDelta/omegaSteps*i,omegaH + omegaDelta/omegaSteps*(i+2), kMax, "init", omegaCheck));
 				fout3 << k << "\t" << omegaH + omegaDelta/omegaSteps * (i+1) << "\t" << determinants[i].real() << "\t" << determinants[i].imag() << "\t" << abs(determinants[i]) << endl;
 			}
@@ -105,7 +105,7 @@ void SpinWaveProblem1D::goThroughGrid() {
 		}
 
 		cout << "k = " << k << " done" << endl;
-		cin.get();
+//		cin.get();
 		determinants.clear();
 	}
 
@@ -145,9 +145,9 @@ double SpinWaveProblem1D::checkNull(double& k, double omega1, double omega2, dou
 
 		for(int i = 0;  i < P+1; i++) {
 //			cout << "Checking determinant " << determinants[i] << endl;;
-			if((determinants[i]/startingDet) < pow(10, -3*N)) {
+			if((determinants[i]/startingDet) < pow(10, -15)) {
 				cout << "Found omega = " << omega1 + (omega2-omega1) / P * (1+i) << " with determinant " << determinants[i] << endl;
-				cin.get();
+//				cin.get();
 				return omega1 + (omega2-omega1) / P * (1+i);
 			}
 //			cout << "It didn't fit" << endl;

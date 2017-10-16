@@ -17,6 +17,6 @@ int main(int argc, char* argv[])
 //
 
 //	SpinWaveProblem1D A = SpinWaveProblem1D(std::stoi(argv[1]), std::stoi(argv[2]), std::stoi(argv[3]));
-	SpinWaveProblem1D A = SpinWaveProblem1D(3, 100, 4000, 1e-2, 500);
+	SpinWaveProblem1D A = SpinWaveProblem1D(1, 100, 500, 1e-2, 200);
 }
 
