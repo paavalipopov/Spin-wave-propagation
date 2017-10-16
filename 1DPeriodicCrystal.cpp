@@ -101,7 +101,8 @@ void SpinWaveProblem1D::goThroughGrid() {
 //		}
 
 		for(int i = 0; i < suspiciousOmega.size(); i++) {
-			fout2 << k << "\t" << suspiciousOmega[i] << "\t" << abs(findDeterminant(k, suspiciousOmega[i])) << endl;
+				if(suspiciousOmega[i] != 0)
+					fout2 << k << "\t" << suspiciousOmega[i] << "\t" << abs(findDeterminant(k, suspiciousOmega[i])) << endl;
 		}
 
 		cout << "k = " << k << " done" << endl;
