@@ -108,6 +108,7 @@ void SpinWaveProblem1D::goThroughGrid() {
 		cout << "k = " << k << " done" << endl;
 //		cin.get();
 		determinants.clear();
+		suspiciousOmega.clear();
 	}
 
 	fout1.close();
