@@ -6,9 +6,9 @@
 
 class SpinWaveProblem1D {
 public:
-	SpinWaveProblem1D(int N, int kStpes, int omegaSteps, double precision, int P);
+	SpinWaveProblem1D(int N, int kStpes, int omegaSteps, int precision, int P, int searchIterations);
 private:
-	int N, P;
+	int N;
 	int kSteps, omegaSteps;
 	double omegaDelta;
 	double a, d;
@@ -22,7 +22,8 @@ private:
 
 	int Debug = 1;
 	double kDebug = 1;
-	double precision;
+	int P, searchIterations, precision;
+
 
 
 	void fillMatrix1(double k, double omega);
