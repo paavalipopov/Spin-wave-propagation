@@ -32,7 +32,7 @@ SpinWaveProblem1D::SpinWaveProblem1D(int N, int kSteps, int omegaSteps, int prec
 }
 
 void SpinWaveProblem1D::goThroughGrid() {
-	double kMax = M_PI / a * 1000;
+	double kMax = M_PI / a * 500;
 	double omegaCheck;
 	vector<complex<double> > determinants;
 	vector<double> suspiciousOmega;
@@ -55,7 +55,7 @@ void SpinWaveProblem1D::goThroughGrid() {
 	for(double k = -kMax; k < kMax; k += kMax/kSteps) {
 		cout << "Calculating layer k = " << k << endl;
 
-		for(double omega = omegaH + omegaDelta/omegaSteps; omega < omegaH + omegaDelta; omega += omegaDelta/omegaSteps) {
+		for(double omega = omegaH + omegaDelta/omegaSteps*0.001; omega < omegaH + omegaDelta*1.07; omega += omegaDelta/omegaSteps) {
 			determinants.push_back(findDeterminant(k, omega));
 			fout1 << k << "\t" << omega << "\t" << abs(determinants.back()) << "\t" << log(abs(determinants.back())) << endl;
 

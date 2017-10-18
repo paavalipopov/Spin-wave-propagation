@@ -7,17 +7,12 @@ import numpy as np
 fig = plt.figure()
 ax = fig.gca(projection='3d')
 
-# Make data.
-f = open('trash', 'w')
-X, Y, Z= np.loadtxt("all results", delimiter='\t', usecols=(0, 1, 2), unpack=True, skiprows=1)
-f.write(X, Y, Z)
-X = np.arange(-5, 5, 0.05)
-Y = np.arange(-5, 5, 0.05)
-X, Y = np.meshgrid(X, Y)
-Z = np.cos(np.sqrt(X**2 + Y**2))
 
+X, Y, Z= np.loadtxt("all results", delimiter='\t', usecols=(0, 1, 2), unpack=True, skiprows=1)
 
 # Plot the surface.
-surf = ax.plot_surface(X, Y, Z, cmap=cm.coolwarm, linewidth=0, antialiased=False)
+surf = ax.plot_trisurf(X, Y, Z, linewidth=0.0005, antialiased=True, cmap=cm.autumn)
+
+fig.colorbar(surf, shrink=0.5, aspect=5)
 
 plt.show()
