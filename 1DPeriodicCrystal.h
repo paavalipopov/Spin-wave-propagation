@@ -6,7 +6,9 @@
 
 class SpinWaveProblem1D {
 public:
-	SpinWaveProblem1D(int N, int kStpes, int omegaSteps, int precision, int P, int searchIterations);
+	SpinWaveProblem1D(int N, int kStpes, int omegaSteps,
+					int precision, int P, int searchIterations);
+
 private:
 	int N;
 	int kSteps, omegaSteps;
@@ -21,7 +23,6 @@ private:
 	double b(int m);
 
 	int Debug = 1;
-	double kDebug = 1;
 	int P, searchIterations, precision;
 
 
@@ -32,7 +33,9 @@ private:
 	void refillMatrix1();
 	void goThroughGrid();
 	std::complex<double> findDeterminant(double k, double omega);
-	double checkNull(double& k, double omega1, double omega2, double& startingDet, std::string mode, double& omegaCheck);
+	double checkNull(double& k, double omega1, double omega2,
+					double& startingDet, std::string mode, double& omegaCheck);
+
 	bool isMinimum(std::vector<std::complex<double> >& determinants, int i, int depth);
 	bool isMinimum(std::vector<double>& determinants, int i);
 

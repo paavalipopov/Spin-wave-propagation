@@ -8,17 +8,8 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
-//	cin.get();
-
-//	if(argc != 4) {
-//		cout << "Not enough arguments" << endl;
-//		return -1;
-//	}
-//
-
-//	SpinWaveProblem1D A = SpinWaveProblem1D(std::stoi(argv[1]), std::stoi(argv[2]), std::stoi(argv[3]));
-	SpinWaveProblem1D A = SpinWaveProblem1D(1, 700, 1500, 10, 100, 4);
-//	SpinWaveProblem1D(int N, int kStpes, int omegaSteps, int precision, int P, int searchIterations)
+	SpinWaveProblem1D A = SpinWaveProblem1D(1, 200, 2000, 4, 100, 8);
+//	(int N, int kStpes, int omegaSteps, int precision, int P, int searchIterations)
 
 }
 
