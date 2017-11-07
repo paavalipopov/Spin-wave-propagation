@@ -30,7 +30,7 @@ private:
 	void fillMatrix1(double k, double omega);
 	Eigen::ComplexEigenSolver<Eigen::MatrixXcd> ces;
 	void fixEigens();
-	void refillMatrix1();
+	void refillMatrix1(std::string mode);
 	void goThroughGrid();
 	std::complex<double> findDeterminant(double k, double omega);
 	double checkNull(double& k, double omega1, double omega2,

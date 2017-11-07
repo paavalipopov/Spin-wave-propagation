@@ -21,7 +21,7 @@ SpinWaveProblem1D::SpinWaveProblem1D(int N, int kSteps, int omegaSteps,
 
 	H = 500;
 	M1x4pi = 1750;
-	M2x4pi = 1650;
+	M2x4pi = 1350;
 
 	omegaH = gamma * H;
 	omegaM1 = gamma * M1x4pi;
@@ -33,7 +33,7 @@ SpinWaveProblem1D::SpinWaveProblem1D(int N, int kSteps, int omegaSteps,
 }
 
 void SpinWaveProblem1D::goThroughGrid() {
-	double kMax = M_PI / a * 2;
+	double kMax = M_PI / a * 500;
 	double omegaCheck;
 	vector<complex<double> > determinants;
 	vector<double> suspiciousOmega;
@@ -44,22 +44,13 @@ void SpinWaveProblem1D::goThroughGrid() {
 	ofstream fout3;
 
 	fout1.open("all results");
-
-	fout1 << "k*a/2pi\tomega\t|detF|\tln(|detF|)These are results for grid: k: "
-	<< kSteps << " points, omega starting: " << omegaSteps <<
-	" points, precision = " << precision << endl;
+	fout1 << "k*a/2pi omega |detF| ln(|detF|) These are results for grid: k: " << kSteps << " points, omega starting: " << omegaSteps << " points, precision = " << precision << endl;
 
 	fout2.open("results");
-
-	fout2 << "k*a/2pi\tomega\t|detF|\tThese are results for grid: k: "
-	<< kSteps << " points, omega starting: " << omegaSteps <<
-	" points, precision = " << precision << endl;
+	fout2 << "k*a/2pi omega |detF| ln(|detF|) These are results for grid: k: " << kSteps << " points, omega starting: " << omegaSteps << " points, precision = " << precision << endl;
 
 	fout3.open("raw mins");
-
-	fout3 << "k*a/2pi\tomega\t|detF|\tThese are results for grid: k: "
-	<< kSteps << " points, omega starting: " << omegaSteps <<
-	" points, precision = " << precision << endl;
+	fout3 << "k*a/2pi omega |detF| ln(|detF|) These are results for grid: k: " << kSteps << " points, omega starting: " << omegaSteps << " points, precision = " << precision << endl;
 
 
 	for(double k = -kMax; k < kMax; k += kMax/kSteps) {
@@ -70,21 +61,16 @@ void SpinWaveProblem1D::goThroughGrid() {
 
 			determinants.push_back(findDeterminant(k, omega));
 
-			fout1 << k/b(1) << "\t" << omega << "\t" << abs(determinants.back())
-			<< "\t" << log(abs(determinants.back())) << endl;
+			fout1 << k/b(1) << " " << omega << " " << abs(determinants.back()) << " " << log(abs(determinants.back())) << endl;
 
 		}
 
 		cout << "Looking for mins" << endl;
 		for(int i = 1; i < determinants.size()-1; i++) {
 			if(isMinimum(determinants, i, 1)) {
-				suspiciousOmega.push_back(checkNull(
-							k, omegaH + omegaDelta/omegaSteps*i,
-							omegaH + omegaDelta/omegaSteps*(i+2),
-							kMax, "init", omegaCheck));
+				suspiciousOmega.push_back(checkNull(k, omegaH + omegaDelta/omegaSteps*i, omegaH + omegaDelta/omegaSteps*(i+2), kMax, "init", omegaCheck));
 
-				fout3 << k/b(1) << "\t" << omegaH + omegaDelta/omegaSteps * (i+1) << "\t" <<
-				determinants[i].real() << "\t" << determinants[i].imag() << "\t" << abs(determinants[i]) << endl;
+				fout3 << k/b(1) << " " << omegaH + omegaDelta/omegaSteps * (i+1) << " " << determinants[i].real() << " " << determinants[i].imag() << " " << abs(determinants[i]) << endl;
 			}
 		}
 
@@ -92,12 +78,9 @@ void SpinWaveProblem1D::goThroughGrid() {
 
 		for(int i = 0; i < suspiciousOmega.size(); i++) {
 				if(suspiciousOmega[i] != 0) {
-					fout2 << k/b(1) << "\t" << suspiciousOmega[i] <<
-					"\t" << abs(findDeterminant(k, suspiciousOmega[i])) << endl;
+					fout2 << k/b(1) << " " << suspiciousOmega[i] << " " << abs(findDeterminant(k, suspiciousOmega[i])) << "\n";
 
-					fout1 << k/b(1) << "\t" << suspiciousOmega[i] <<
-					"\t" << abs(findDeterminant(k, suspiciousOmega[i])) <<
-					"\t" << log(abs(findDeterminant(k, suspiciousOmega[i]))) << endl;
+					fout1 << k/b(1) << " " << suspiciousOmega[i] << " " << abs(findDeterminant(k, suspiciousOmega[i])) << " " << log(abs(findDeterminant(k, suspiciousOmega[i]))) << endl;
 				}
 		}
 
@@ -115,12 +98,17 @@ std::complex<double> SpinWaveProblem1D::findDeterminant(double k, double omega) 
 	fillMatrix1(k, omega);
 	ces.compute(Matrix1);
 	fixEigens();
-	refillMatrix1();
-	return Matrix1.determinant();
+	refillMatrix1("sin");
+	complex<double> det1 = Matrix1.determinant();
+	refillMatrix1("cos");
+	complex<double> det2 = Matrix1.determinant();
+	if(abs(det1) > abs(det2))
+		return det2;
+	else
+		return det1;
 }
 
-double SpinWaveProblem1D::checkNull(double& k, double omega1, double omega2,
-									double& startingDet, string mode, double& omegaCheck) {
+double SpinWaveProblem1D::checkNull(double& k, double omega1, double omega2, double& startingDet, string mode, double& omegaCheck) {
 	if(mode == "abs") {
 		if((omega2 - omega1) <= omegaDelta/omegaSteps / (pow(P, searchIterations) + P)) {
 			return 0;
@@ -288,13 +276,18 @@ void SpinWaveProblem1D::fixEigens() {
 	return;
 }
 
-void SpinWaveProblem1D::refillMatrix1() {
+void SpinWaveProblem1D::refillMatrix1(string mode) {
 	Matrix1 = MatrixXcd(2*N + 1, 2*N + 1);
 
 	for(int i = 0; i < 2*N + 1; i++) {
 		for(int j = 0; j < 2*N + 1; j++) {
-			Matrix1(i, j) = eigenValues(j) * eigenVectors(i, j) *
-			sin( sqrt(eigenValues(j)) * 2.0 * d);
+			if(mode == "sin") {
+				Matrix1(i, j) = eigenValues(j) * eigenVectors(i, j) * sin( sqrt(eigenValues(j)) * d);
+			}
+			if(mode == "cos") {
+				Matrix1(i, j) = eigenValues(j) * eigenVectors(i, j) * cos( sqrt(eigenValues(j)) * d);
+			}
+
 
 			if(Debug == 1) {
 				if(abs(Matrix1(i, j).real()) < pow(10, -1*precision))
@@ -305,6 +298,7 @@ void SpinWaveProblem1D::refillMatrix1() {
 			}
 		}
 	}
+
 
 //	cout << "Matrix for determinant: " << endl << Matrix1 << endl;
 //	cin.get();
