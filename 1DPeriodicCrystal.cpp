@@ -17,7 +17,7 @@ SpinWaveProblem1D::SpinWaveProblem1D(int N, int kSteps, int omegaSteps,
 
 	a = 0.1;
 	d = 0.001;
-	gamma = 8791208;
+	gamma = 17660000;
 
 	H = 500;
 	M1x4pi = 1750;
@@ -33,7 +33,7 @@ SpinWaveProblem1D::SpinWaveProblem1D(int N, int kSteps, int omegaSteps,
 }
 
 void SpinWaveProblem1D::goThroughGrid() {
-	double kMax = M_PI / a * 500;
+	double kMax = M_PI / a * 4;
 	double omegaCheck;
 	vector<complex<double> > determinants;
 	vector<double> suspiciousOmega;
@@ -53,7 +53,7 @@ void SpinWaveProblem1D::goThroughGrid() {
 	fout3 << "k*a/2pi omega |detF| ln(|detF|) These are results for grid: k: " << kSteps << " points, omega starting: " << omegaSteps << " points, precision = " << precision << endl;
 
 
-	for(double k = -kMax; k < kMax; k += kMax/kSteps) {
+	for(double k = 0; k < kMax*1.001; k += kMax/kSteps) {
 		cout << "Calculating layer k = " << k << endl;
 
 		for(double omega = omegaH + 1;
